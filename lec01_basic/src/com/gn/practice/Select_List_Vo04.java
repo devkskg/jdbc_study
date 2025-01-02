@@ -9,9 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.gn.study.model.vo.Test;
- 
 
-public class Select_List_Vo {
+public class Select_List_Vo04 {
 	public static void main(String[] args) {
 		
 		Connection conn = null;
@@ -28,19 +27,23 @@ public class Select_List_Vo {
 			
 			stmt = conn.createStatement();
 			
-			String sql = "select t_no ,t_name ,t_date from test";
+			String sql = "select t_no, t_name ,t_date from test";
 			
 			rs = stmt.executeQuery(sql);
 			
 			List<Test> list = new ArrayList<Test>();
+			
 			while(rs.next()) {
-				list.add(new Test(rs.getInt("t_no"), rs.getString("t_name"), rs.getTimestamp("t_date").toLocalDateTime()));
+				Test t = new Test();
+				t.setTestNo(rs.getInt(1));
+				t.setTestName(rs.getString(2));
+				t.setTestDate(rs.getTimestamp(3).toLocalDateTime());
+				list.add(t);
 			}
+			
 			for(Test l : list) {
 				System.out.println(l);
 			}
-			
-			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -54,7 +57,9 @@ public class Select_List_Vo {
 			}
 		}
 		
-		
-		
 	}
+	
+	
 }
+//"jdbc:mariadb://127.0.0.1:3306/jdbc_basic"
+//org.mariadb.jdbc.Driver
