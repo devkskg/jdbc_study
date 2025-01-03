@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Select_One_Scanner {
@@ -32,13 +35,24 @@ public class Select_One_Scanner {
 			
 			rs = stmt.executeQuery(sql);
 			
-			Vo v = new Vo();
+//			Vo v = new Vo();
+			Vo v = null;
 			if(rs.next()) {
-				v.setNo(rs.getInt("t_no"));
-				v.setName(rs.getString("t_name"));
-				v.setDate(rs.getTimestamp("t_date").toLocalDateTime());
+//				v.setNo(rs.getInt("t_no"));
+//				v.setName(rs.getString("t_name"));
+//				v.setDate(rs.getTimestamp("t_date").toLocalDateTime());
+				int no = rs.getInt("t_no");
+				String name = (rs.getString("t_name"));
+				LocalDateTime date = (rs.getTimestamp("t_date").toLocalDateTime());
+				v = new Vo(no, name, date);
 			}
-			System.out.println(v);
+			if(v == null) {
+				System.out.println("데이터 없다");
+			} else {
+				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy년MM월dd일 HH시mm분SS초");
+				System.out.println("dtf랑 get 써보기~ 클래스 Vo만드는 것보다 더 좋아보여");
+			}
+//			System.out.println(v);
 			
 			
 		} catch (Exception e) {
