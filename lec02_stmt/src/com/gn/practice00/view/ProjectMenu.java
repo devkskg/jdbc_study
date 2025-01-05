@@ -1,8 +1,10 @@
 package com.gn.practice00.view;
 
+import java.util.List;
 import java.util.Scanner;
 
 import com.gn.practice00.controller.ProjectController;
+import com.gn.practice00.vo.Project;
 
 public class ProjectMenu {
 	ProjectController pc = new ProjectController();
@@ -26,7 +28,10 @@ public class ProjectMenu {
 	}
 	
 	public void selectMemberAll() {
-		pc.selectMemberAll();
+		List<Project> list = pc.selectMemberAll();
+		for(Project l : list) {
+			System.out.println(l);
+		}
 	}
 	
 }

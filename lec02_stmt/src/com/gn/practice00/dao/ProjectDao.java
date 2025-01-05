@@ -13,12 +13,12 @@ import com.gn.practice00.vo.Project;
 
 public class ProjectDao {
 	
-	public void selectMemberAll() {
+	public List<Project> selectMemberAll() {
 		
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
-		
+		List<Project> list = new ArrayList<Project>();
 		try {
 			
 			Class.forName("org.mariadb.jdbc.Driver");
@@ -28,7 +28,7 @@ public class ProjectDao {
 			conn = DriverManager.getConnection(url, id, pw);
 			stmt = conn.createStatement();
 			String sql = "select * from member";
-			List<Project> list = new ArrayList<Project>();
+			
 			
 			rs = stmt.executeQuery(sql);
 			
@@ -36,9 +36,9 @@ public class ProjectDao {
 				list.add(new Project(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getTimestamp(8).toLocalDateTime()));
 			}
 			
-			for(Project l : list) {
-				System.out.println(l);
-			}
+//			for(Project l : list) {
+//				System.out.println(l);
+//			}
 			
 		} catch (Exception e) {
 		} finally {
@@ -51,7 +51,7 @@ public class ProjectDao {
 			}
 			
 		}
-		
+		return list;
 		
 		
 	}
