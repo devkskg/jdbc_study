@@ -250,5 +250,38 @@ public class WMDao {
 		return result;
 	}
 	
+	public WMSong songData(int songNo){
+		WMSong wms = null;
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			String url = "jdbc:mariadb://127.0.0.1:3306/watermelon_music";
+			String id = "scott";
+			String pw = "tiger";
+			conn = DriverManager.getConnection(url, id, pw);
+			stmt = conn.createStatement();
+			String sql = "select * from wm_song where s_no = " + songNo;
+			rs = stmt.executeQuery(sql);
+			
+			while(rs.next()) {
+				wms = new WMSong(rs.getInt("s_no"), rs.getString("s_title"), rs.getString("s_artist"), rs.getInt("s_count"));
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return wms;
+	}
+	
 	
 }

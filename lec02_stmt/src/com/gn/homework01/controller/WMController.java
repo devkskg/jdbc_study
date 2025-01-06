@@ -37,4 +37,8 @@ public class WMController {
 		return d.deleteId(wmid, wmpw);
 	}
 	
+	public WMSong songData(int songNo) {
+		return d.songData(songNo);
+	}
+	
 }

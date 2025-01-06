@@ -148,7 +148,12 @@ public class WMMenu {
 		sc.nextLine();
 		int result = selectSongNum(songNum);
 		if(result > 0) {
-			System.out.println("재생 성공");
+			WMSong wms = songData(songNum);
+			System.out.println("*** " + songNum + "번 ***");
+			System.out.println("제목 : " + wms.getS_title());
+			System.out.println("가수 : " + wms.getS_artist());
+			System.out.println("재생 횟수 : " + wms.getS_count());
+			System.out.println("*** 재생 성공 ***");
 		} else {
 			System.out.println("재생 실패");
 		}
@@ -221,6 +226,9 @@ public class WMMenu {
 	}
 	
 	
+	public WMSong songData(int songNo) {
+		return c.songData(songNo);
+	}
 		
 		
 	
