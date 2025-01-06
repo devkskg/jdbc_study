@@ -159,7 +159,7 @@ public class WMMenu {
 	public void searchAllSong() {
 		System.out.println("=== 음악 재생 ===");
 		List<WMSong> list = c.searchAllSong();
-		Collections.sort(list);
+//		Collections.sort(list);
 		if(list.isEmpty()) {
 			System.out.println("목록이 비어있습니다.");
 		} else {

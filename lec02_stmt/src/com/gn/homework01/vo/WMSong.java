@@ -2,7 +2,7 @@ package com.gn.homework01.vo;
 
 import java.util.Objects;
 
-public class WMSong implements Comparable<WMSong> {
+public class WMSong /*implements Comparable<WMSong>*/ {
 	private int s_no;
 	private String s_title;
 	private String s_artist;
@@ -62,10 +62,10 @@ public class WMSong implements Comparable<WMSong> {
 //		return Objects.equals(s_artist, other.s_artist) && s_count == other.s_count && s_no == other.s_no
 //				&& Objects.equals(s_title, other.s_title);
 //	}
-	@Override
-	public int compareTo(WMSong other) {
-		return Integer.compare(this.s_no, other.s_no);
-	}
+//	@Override
+//	public int compareTo(WMSong other) {
+//		return Integer.compare(this.s_no, other.s_no);
+//	}
 	
 	
 	
