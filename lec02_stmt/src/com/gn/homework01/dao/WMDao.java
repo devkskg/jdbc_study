@@ -1,4 +1,4 @@
-package com.gn.study.model.dao;
+package com.gn.homework01.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,24 +8,59 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gn.study.model.vo.Member;
+import com.gn.homework01.vo.WMSong;
+import com.gn.homework01.vo.WMUser;
 
-public class MemberDao {
-	public int insertMember(Member m) {
+public class WMDao {
+	
+	public WMUser login(String wmid, String wmpw) {
 		Connection conn = null;
 		Statement stmt = null;
-		int result = 0;
+		ResultSet rs = null;
+		
+		WMUser wmu = null;;
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
-			String url = "jdbc:mariadb://127.0.0.1:3306/jdbc_basic";
+			String url = "jdbc:mariadb://127.0.0.1:3306/watermelon_music";
 			String id = "scott";
 			String pw = "tiger";
 			conn = DriverManager.getConnection(url, id, pw);
 			stmt = conn.createStatement();
-			String sql = "insert into member(m_id ,m_pw ,m_name ,m_email ,m_phone ,m_gender) values('"+m.getMemberName()+"','"+m.getMemberPw()+"','"+m.getMemberName()+"','"+m.getMemberEmail()+"','"+m.getMemberPhone()+"','"+m.getMemberGender()+"')";
+			String sql = "select * from wm_user where u_id = '"+wmid+"' and u_pw = '"+wmpw+"'";
+			rs = stmt.executeQuery(sql);
+			
+			if(rs.next()) {
+				wmu = new WMUser(rs.getInt("u_no"), rs.getString("u_id"), rs.getString("u_pw"), rs.getString("u_name"), rs.getTimestamp("u_regdate").toLocalDateTime());
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return wmu;
+	}
+	
+	public int joinMember(String wmid, String wmpw, String wmname) {
+		Connection conn = null;
+		Statement stmt = null;
+		int result = 0;
+		
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			String url = "jdbc:mariadb://127.0.0.1:3306/watermelon_music";
+			String id = "scott";
+			String pw = "tiger";
+			conn = DriverManager.getConnection(url, id, pw);
+			stmt = conn.createStatement();
+			String sql = "insert into wm_user(u_id, u_pw, u_name) values('"+wmid+"','"+wmpw+"','"+wmname+"')";
 			result = stmt.executeUpdate(sql);
-			
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -39,33 +74,57 @@ public class MemberDao {
 		return result;
 	}
 	
-	public List<Member> selectMemberAll() {
-////		전체 멤버 정보 조회 -> List<Member> 형태로 return
-//		List<Member> list = new ArrayList<Member>();
-////		DB에 SQL문 요청
-//		return list;
-		List<Member> list = new ArrayList<Member>();
+	public int addPlayList(String title, String artist) {
+		Connection conn = null;
+		Statement stmt = null;
+		int result = 0;
+		
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			String url = "jdbc:mariadb://127.0.0.1:3306/watermelon_music";
+			String id = "scott";
+			String pw = "tiger";
+			conn = DriverManager.getConnection(url, id, pw);
+			stmt = conn.createStatement();
+			String sql = "insert into wm_song(s_title, s_artist) values('"+title+"','"+artist+"')";
+			result = stmt.executeUpdate(sql);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	
+	public List<WMSong> searchTopSong(){
+		List<WMSong> list = new ArrayList<WMSong>();
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
 		
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
-			String url = "jdbc:mariadb://127.0.0.1:3306/jdbc_basic";
+			String url = "jdbc:mariadb://127.0.0.1:3306/watermelon_music";
 			String id = "scott";
 			String pw = "tiger";
 			conn = DriverManager.getConnection(url, id, pw);
 			stmt = conn.createStatement();
-			String sql = "select * from member";
+			String sql = "select * from wm_song order by s_count desc";
 			rs = stmt.executeQuery(sql);
+			
 			while(rs.next()) {
-				list.add(new Member(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getTimestamp(8).toLocalDateTime(), rs.getTimestamp(9).toLocalDateTime()));
+				list.add(new WMSong(rs.getInt("s_no"), rs.getString("s_title"), rs.getString("s_artist"), rs.getInt("s_count")));
 			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				rs.close();
 				stmt.close();
 				conn.close();
 			} catch (SQLException e) {
@@ -75,121 +134,52 @@ public class MemberDao {
 		return list;
 	}
 	
-	public Member selectMemberOneById(String memId) {
+	public List<WMSong> searchAllSong(){
+		List<WMSong> list = new ArrayList<WMSong>();
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
-		Member m = null;
 		
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
-			String url = "jdbc:mariadb://127.0.0.1:3306/jdbc_basic";
+			String url = "jdbc:mariadb://127.0.0.1:3306/watermelon_music";
 			String id = "scott";
 			String pw = "tiger";
 			conn = DriverManager.getConnection(url, id, pw);
 			stmt = conn.createStatement();
-			String sql = "select * from member where m_id = '" + memId + "'";
+			String sql = "select * from wm_song order by s_no";
 			rs = stmt.executeQuery(sql);
 			
-			if(rs.next()) {
-				m = new Member(rs.getInt("m_no"), rs.getString("m_id"), rs.getString("m_pw"));
-			}
-			
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				rs.close();
-				stmt.close();
-				conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return m;
-	}
-	
-	public List<Member> searchMemberOneByName(String name){
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		List<Member> list = new ArrayList<Member>();
-		
-		try {
-			Class.forName("org.mariadb.jdbc.Driver");
-			String url = "jdbc:mariadb://127.0.0.1:3306/jdbc_basic";
-			String id = "scott";
-			String pw = "tiger";
-			conn = DriverManager.getConnection(url, id, pw);
-			stmt = conn.createStatement();
-			String sql = "SELECT * FROM member where m_name LIKE '%"+name+"%'";
-			rs = stmt.executeQuery(sql);
 			while(rs.next()) {
-				list.add(new Member(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getTimestamp(8).toLocalDateTime(), rs.getTimestamp(9).toLocalDateTime()));
+				list.add(new WMSong(rs.getInt("s_no"), rs.getString("s_title"), rs.getString("s_artist"), rs.getInt("s_count")));
 			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				rs.close();
 				stmt.close();
 				conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
-		
 		return list;
 	}
 	
-	public Member selectMemberOneByIdAndPw(String mid, String mpw) {
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		Member m = null;
-		try {
-			Class.forName("org.mariadb.jdbc.Driver");
-			String url = "jdbc:mariadb://127.0.0.1:3306/jdbc_basic";
-			String id = "scott";
-			String pw = "tiger";
-			conn = DriverManager.getConnection(url, id, pw);
-			stmt = conn.createStatement();
-			String sql = "SELECT * FROM member where m_id = '"+ mid +"' and m_pw = '"+ mpw +"'";
-			rs = stmt.executeQuery(sql);
-			
-			if(rs.next()) {
-				m = new Member(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getTimestamp(8).toLocalDateTime(), rs.getTimestamp(9).toLocalDateTime());
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				rs.close();
-				stmt.close();
-				conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return m;
-	}
-	
-	public int updateMemberInfo(String mid, String mname, String mphone, String memail) {
+	public int selectSongNum(int songNum) {
 		Connection conn = null;
 		Statement stmt = null;
 		int result = 0;
 		
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
-			String url = "jdbc:mariadb://127.0.0.1:3306/jdbc_basic";
+			String url = "jdbc:mariadb://127.0.0.1:3306/watermelon_music";
 			String id = "scott";
 			String pw = "tiger";
 			conn = DriverManager.getConnection(url, id, pw);
 			stmt = conn.createStatement();
-			String sql = "update member set m_name = '" + mname + "', m_phone = '"+mphone+"', m_email = '"+memail+"' where m_id = '"+mid+"'";
+			String sql = "update wm_song set s_count = s_count +1 where s_no = " + songNum;
 			result = stmt.executeUpdate(sql);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -200,25 +190,25 @@ public class MemberDao {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			
 		}
 		return result;
 	}
 	
-	public int deleteMember(String mid, String mpw) {
+	public int changeUserName(String newName, String wmid, String wmpw) {
 		Connection conn = null;
 		Statement stmt = null;
 		int result = 0;
 		
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
-			String url = "jdbc:mariadb://127.0.0.1:3306/jdbc_basic";
+			String url = "jdbc:mariadb://127.0.0.1:3306/watermelon_music";
 			String id = "scott";
 			String pw = "tiger";
 			conn = DriverManager.getConnection(url, id, pw);
 			stmt = conn.createStatement();
-			String sql = "delete from member where m_id = '"+mid+"' and m_pw = '"+mpw+"'";
+			String sql = "update wm_user set u_name = '"+newName+"' where u_id = '"+wmid+"' and u_pw = '"+wmpw+"'";
 			result = stmt.executeUpdate(sql);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -228,8 +218,37 @@ public class MemberDao {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			
 		}
 		return result;
 	}
+	
+	public int deleteId(String wmid, String wmpw) {
+		Connection conn = null;
+		Statement stmt = null;
+		int result = 0;
+		
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			String url = "jdbc:mariadb://127.0.0.1:3306/watermelon_music";
+			String id = "scott";
+			String pw = "tiger";
+			conn = DriverManager.getConnection(url, id, pw);
+			stmt = conn.createStatement();
+			String sql = "delete from wm_user where u_id = '"+wmid+"' and u_pw = '"+wmpw+"'";
+			result = stmt.executeUpdate(sql);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	
+	
 }

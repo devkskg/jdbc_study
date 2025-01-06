@@ -36,10 +36,16 @@ public class MemberController {
 	}
 	
 	public Member selectMemberOneByIdAndPw(String id, String pw) {
-		
+		return new MemberDao().selectMemberOneByIdAndPw(id, pw);
 	}
 	
-	public int updateMemberInfo(String name, String phone, String email) {
-		
+	public int updateMemberInfo(String id, String name, String phone, String email) {
+		MemberDao md = new MemberDao();
+		return md.updateMemberInfo(id, name, phone, email);
+	}
+	
+	public int deleteMember(String id, String pw) {
+		MemberDao md = new MemberDao();
+		return md.deleteMember(id, pw);
 	}
 }

@@ -1,10 +1,10 @@
 package com.gn.homework01.run;
 
-import com.gn.homework01.view.Menu;
+import com.gn.homework01.view.WMMenu;
 
 public class Run {
 	public static void main(String[] args) {
-		Menu m = new Menu();
+		WMMenu m = new WMMenu();
 		m.mainMenu();
 	}
 }

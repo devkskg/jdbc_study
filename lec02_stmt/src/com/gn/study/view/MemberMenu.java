@@ -40,6 +40,8 @@ public class MemberMenu {
 					searchMemberOneByName(); break;
 				case 5 : // 회원 정보 수정
 					updateMember(); break;
+				case 6 : // 회원 탈퇴
+					deleteMember(); break;
 				default : System.out.println("잘못된 번호입니다."); break;
 			}
 		}
@@ -138,15 +140,49 @@ public class MemberMenu {
 			String phone = sc.nextLine();
 			System.out.print("이메일 : ");
 			String email = sc.nextLine();
-			int result = mc.updateMemberInfo(name, phone, email);
+			int result = mc.updateMemberInfo(id, name, phone, email);
 			if(result > 0) {
 				System.out.println("수정 성공!");
 			} else {
 				System.out.println("수정 실패ㅜㅜ");
 			}
+		} 
+		else {
+			System.out.println("잘못된 아이디 혹은 비밀번호입니다.");
+		}
+		
+	}
+	
+//	회원 탈퇴
+	public void deleteMember() {
+		System.out.println("=== 회원 탈퇴 ===");
+		System.out.print("아이디 : ");
+		String id = sc.nextLine();
+		System.out.print("비밀번호 : ");
+		String pw = sc.nextLine();
+		
+		Member m = mc.selectMemberOneByIdAndPw(id, pw);
+		if(m != null) {
+			System.out.print("탈퇴를 진행중입니다.(확인 : Y / N) \n입력 : ");
+			String yn = sc.nextLine().toUpperCase();
+			if(yn.equals("Y")) {
+				System.out.println(m);
+				System.out.print("비밀번호를 다시 입력해주세요 : ");
+				String pw2 = sc.nextLine();
+				int result = mc.deleteMember(id, pw2);
+				if(result > 0) {
+					System.out.println("탈퇴 성공!");
+				} else {
+					System.out.println("탈퇴 실패ㅜㅜ");
+				}
+			} else if(yn.equals("N")) {
+				System.out.println("탈퇴 절차를 취소합니다.");
+			}
+			
 		} else {
 			System.out.println("잘못된 아이디 혹은 비밀번호입니다.");
 		}
+		
 		
 	}
 	
