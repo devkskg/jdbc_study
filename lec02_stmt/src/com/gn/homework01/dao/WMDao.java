@@ -114,7 +114,7 @@ public class WMDao {
 			String pw = "tiger";
 			conn = DriverManager.getConnection(url, id, pw);
 			stmt = conn.createStatement();
-			String sql = "select * from wm_song order by s_count desc";
+			String sql = "select * from wm_song order by s_count desc limit 10";
 			rs = stmt.executeQuery(sql);
 			
 			while(rs.next()) {

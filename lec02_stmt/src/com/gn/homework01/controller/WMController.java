@@ -25,7 +25,7 @@ public class WMController {
 		return d.searchTopSong();
 	}
 	public List<WMSong> searchAllSong(){
-		return d.searchTopSong();
+		return d.searchAllSong();
 	}
 	public int selectSongNum(int songNum) {
 		return d.selectSongNum(songNum);
