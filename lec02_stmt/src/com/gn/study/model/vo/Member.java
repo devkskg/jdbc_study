@@ -16,6 +16,17 @@ public class Member {
 	
 	public Member() {
 	}
+	
+	public Member(int memberNo, String memberId, String memberPw) {
+		super();
+		this.memberNo = memberNo;
+		this.memberId = memberId;
+		this.memberPw = memberPw;
+//		땜빵식으로 그냥 지금 시간 적어서 toString 나오게 한것.
+		this.regDate = LocalDateTime.now();
+		this.modDate = LocalDateTime.now();
+	}
+
 	public Member(String memberId, String memberPw, String memberName, String memberEmail,
 			String memberPhone, String memberGender) {
 		this.memberId = memberId;
@@ -105,6 +116,8 @@ public class Member {
 				+ ", 가입일=" + dtf.format(regDate) 
 				+ ", 수정일=" + dtf.format(modDate) + "]";
 	}
+	
+	
 	
 	
 	

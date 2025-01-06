@@ -24,5 +24,22 @@ public class MemberController {
 		return list;
 	}
 	
+	public Member selectMemberOneById(String memberId) {
+//		Member m = new MemberDao().selectMemberOneById(memberId);
+//		return m;
+		return new MemberDao().selectMemberOneById(memberId);
+	}
 	
+	public List<Member> searchMemberOneByName(String name){
+		MemberDao md = new MemberDao();
+		return md.searchMemberOneByName(name);
+	}
+	
+	public Member selectMemberOneByIdAndPw(String id, String pw) {
+		
+	}
+	
+	public int updateMemberInfo(String name, String phone, String email) {
+		
+	}
 }

@@ -74,4 +74,73 @@ public class MemberDao {
 		}
 		return list;
 	}
+	
+	public Member selectMemberOneById(String memId) {
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		Member m = null;
+		
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			String url = "jdbc:mariadb://127.0.0.1:3306/jdbc_basic";
+			String id = "scott";
+			String pw = "tiger";
+			conn = DriverManager.getConnection(url, id, pw);
+			stmt = conn.createStatement();
+			String sql = "select * from member where m_id = '" + memId + "'";
+			rs = stmt.executeQuery(sql);
+			
+			if(rs.next()) {
+				m = new Member(rs.getInt("m_no"), rs.getString("m_id"), rs.getString("m_pw"));
+			}
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return m;
+	}
+	
+	public List<Member> searchMemberOneByName(String name){
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		List<Member> list = new ArrayList<Member>();
+		
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			String url = "jdbc:mariadb://127.0.0.1:3306/jdbc_basic";
+			String id = "scott";
+			String pw = "tiger";
+			conn = DriverManager.getConnection(url, id, pw);
+			stmt = conn.createStatement();
+			String sql = "SELECT * FROM member where m_name LIKE '%"+name+"%'";
+			rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				list.add(new Member(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getTimestamp(8).toLocalDateTime(), rs.getTimestamp(9).toLocalDateTime()));
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return list;
+	}
 }
