@@ -26,8 +26,8 @@ public class WMMenu {
 			case 0 : System.out.println("=== 프로그램 종료 ==="); return;
 			case 1 : joinMember(); break;
 			case 2 : login(); break;
-			case 123 : managerMenu(); break;
-			case 456 : userMenu(); break;
+//			case 123 : managerMenu(); break;
+//			case 456 : userMenu(); break;
 			default : System.out.println("잘못된 번호입니다.~~"); break;
 			}
 			

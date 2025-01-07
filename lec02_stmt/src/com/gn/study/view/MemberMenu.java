@@ -141,6 +141,8 @@ public class MemberMenu {
 			System.out.print("이메일 : ");
 			String email = sc.nextLine();
 			int result = mc.updateMemberInfo(id, name, phone, email);
+//			int result = mc.updateMemberInfo(m.getMemberNo(), name, phone, email); // 이런식으로 멤버의 PK를 사용하는 방법이 정석적인 방법이다.
+			
 			if(result > 0) {
 				System.out.println("수정 성공!");
 			} else {
