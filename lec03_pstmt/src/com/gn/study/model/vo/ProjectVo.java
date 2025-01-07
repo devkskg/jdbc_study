@@ -1,6 +1,7 @@
 package com.gn.study.model.vo;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class ProjectVo {
 	private int projectId; // PK(번호)
@@ -8,6 +9,7 @@ public class ProjectVo {
 	private int projectManager; // FK(employee의 emp_id) -> 관리자 사번
 	private LocalDateTime regDate; // 등록일
 	private LocalDateTime modDate; // 수정일
+	private String managerName;
 
 	public ProjectVo() {
 	}
@@ -25,6 +27,16 @@ public class ProjectVo {
 		this.projectManager = projectManager;
 		this.regDate = regDate;
 		this.modDate = modDate;
+	}
+	
+	public ProjectVo(int projectId, String projectName, int projectManager, LocalDateTime regDate,
+			LocalDateTime modDate , String managerName) {
+		this.projectId = projectId;
+		this.projectName = projectName;
+		this.projectManager = projectManager;
+		this.regDate = regDate;
+		this.modDate = modDate;
+		this.managerName = managerName;
 	}
 
 	public int getProjectId() {
@@ -66,14 +78,27 @@ public class ProjectVo {
 	public void setModDate(LocalDateTime modDate) {
 		this.modDate = modDate;
 	}
+	
+	public String getManagerName() {
+		return managerName;
+	}
+
+	public void setManagerName(String managerName) {
+		this.managerName = managerName;
+	}
 
 	@Override
 	public String toString() {
-		return "projectId=" + projectId 
-				+ ", projectName=" + projectName 
-				+ ", projectManager=" + projectManager 
-				+ ", regDate=" + regDate 
-				+ ", modDate=" + modDate;
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yy-MM-dd(E)");
+		String convName = this.managerName + "(" + this.projectManager + ")";
+		if(this.managerName == null && this.projectManager == 0) {
+			convName = "미정";
+		}
+		return "[번호 : " + projectId 
+				+ ", 이름 : " + projectName 
+				+ ", 관리자 : " + convName
+				+ ", 등록일 : " + regDate.format(dtf)
+				+ ", 수정일 : " + modDate.format(dtf) + "]";
 	}
 
 }
