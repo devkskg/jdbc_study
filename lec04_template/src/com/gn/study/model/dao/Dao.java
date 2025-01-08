@@ -251,12 +251,27 @@ public class Dao {
 	public int editCarOne(Connection conn, int no, Object newName, Object newPrice, Object newDate) {
 		PreparedStatement pstmt = null;
 		int result = 0;
+		StringBuilder sb = new StringBuilder();
 		
 		try {
-			String sqlName = " ";
-			String sqlPrice = " ";
-			String sqlDate = " ";
-			String sql = "update car set" + sqlName + sqlPrice + sqlDate + "where car_no = ?";
+			String sqlName = "";
+			String sqlPrice = "";
+			String sqlDate = "";
+			if(newName != null) {
+				sqlName = " car_model = '" + (String)newName + "',";
+				sb.append(sqlName);
+			} 
+			if(newPrice != null) {
+				sqlPrice = " car_price = " + Integer.parseInt((String)newPrice) + ",";
+				sb.append(sqlPrice);
+			}
+			if(newDate != null) {
+				sqlDate = " car_date = str_to_date('" + newDate + "', '%Y-%m-%d'),";
+				sb.append(sqlDate);
+			}
+			sb.deleteCharAt(sb.length()-1);
+			
+			String sql = "update car set" + sb.toString() + " where car_no = ?";
 //					+ "set car_model = "
 //					+ ",car_price = ? "
 //					+ ",car_date = str_to_date(?, '%Y-%m-%d') "
@@ -264,15 +279,7 @@ public class Dao {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, no);
 //			콤마콤마 어덯게 할지 !!!!!
-			if(newName != null) {
-				sqlName = " car_model = " + (String)newName + " ";
-			} 
-			if(newPrice != null) {
-				sqlPrice = " car_price = " + (Integer)newPrice + " ";
-			}
-			if(newDate != null) {
-				sqlDate = " car_date = str_to_date(" + (String)newDate + ", '%Y-%m-%d') ";
-			}
+			
 			
 			result = pstmt.executeUpdate();
 //			if(newName != null) {

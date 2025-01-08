@@ -156,14 +156,14 @@ public class Menu {
 		System.out.println("*** 수정 ***");
 		List<Car> list = controller.selectCarAll();
 		printList(list);
-		System.out.println("어떤 모델의 ");
+		System.out.println("어떤 모델의 정보를 수정하시겠습니까?");
 		System.out.print("번호 : ");
 		int no = sc.nextInt();
 		sc.nextLine();
-		
 		Object newName = editCarOneCheck("모델명");
 		Object newPrice = editCarOneCheck("가격");
 		Object newDate = editCarOneCheck("출시일");
+		System.out.println(newDate);
 		
 		int result = controller.editCarOne(no, newName, newPrice, newDate);
 		
@@ -172,13 +172,14 @@ public class Menu {
 //	반복되는 질문 메소
 	public Object editCarOneCheck(String newSomething) {
 		Object newOne = null;
-		System.out.print(newSomething + "을 수정하시겠습니까?");
-		String ynName = sc.nextLine().toUpperCase();
-		if("Y".equals(ynName) && "출시일".equals(newSomething)) {
+		System.out.print(newSomething + "을 수정하시겠습니까?(Y/N) : ");
+		String yn = sc.nextLine().toUpperCase();
+		if("Y".equals(yn) && "출시일".equals(newSomething)) {
 			System.out.println("다만, 출시일은 반드시 OOOO-OO-OO 형식으로 입력해주세요.");
 			System.out.print(newSomething + " : ");
 			newOne = sc.nextLine();
-		} else if("Y".equals(ynName)) {
+			
+		} else if("Y".equals(yn)) {
 			System.out.print(newSomething + " : ");
 			newOne = sc.nextLine();
 		}
