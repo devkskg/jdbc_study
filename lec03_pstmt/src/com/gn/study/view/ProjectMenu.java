@@ -116,6 +116,7 @@ public class ProjectMenu {
 		printProjectResult(result, "프로젝트 정보 수정");
 	}
 	
+//	전체 목록 조회, 삭제하고자 하는 번호 입력받아서 -> 삭제 처리
 	public void deleteProjectOne() {
 		System.out.println("*** 프로젝트 삭제 ***");
 		List<ProjectVo> list = pc.selectProjectAll();
