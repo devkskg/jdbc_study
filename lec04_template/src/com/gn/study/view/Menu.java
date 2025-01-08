@@ -30,8 +30,8 @@ public class Menu {
 				case 1 : insertCarOne(); break;
 				case 2 : selectCarAll(); break;
 				case 3 : selectCarOne(); break;
-				case 4 : break;
-				case 5 : break;
+				case 4 : editCarOne(); break;
+				case 5 : deleteCarOne(); break;
 				case 0 : System.out.println("종료합니다."); return;
 			}	
 		}
@@ -139,6 +139,55 @@ public class Menu {
 		selectCarOnePrint(selectCar, "출시일");
 		
 	}
+	
+//	삭제 메소드
+	public void deleteCarOne() {
+		System.out.println("*** 삭제 ***");
+		List<Car> list = controller.selectCarAll();
+		printList(list);
+		System.out.println("삭제하고자 하는 자동차 번호를 입력하세요.");
+		System.out.print("번호 : ");
+		int no = sc.nextInt();
+		int result = controller.deleteCarOne(no);
+		dmlResultPrint(result, "삭제");
+	}
+//	수정 메소드
+	public void editCarOne() {
+		System.out.println("*** 수정 ***");
+		List<Car> list = controller.selectCarAll();
+		printList(list);
+		System.out.println("어떤 모델의 ");
+		System.out.print("번호 : ");
+		int no = sc.nextInt();
+		sc.nextLine();
+		
+		Object newName = editCarOneCheck("모델명");
+		Object newPrice = editCarOneCheck("가격");
+		Object newDate = editCarOneCheck("출시일");
+		
+		int result = controller.editCarOne(no, newName, newPrice, newDate);
+		
+		dmlResultPrint(result, "수정");
+	}
+//	반복되는 질문 메소
+	public Object editCarOneCheck(String newSomething) {
+		Object newOne = null;
+		System.out.print(newSomething + "을 수정하시겠습니까?");
+		String ynName = sc.nextLine().toUpperCase();
+		if("Y".equals(ynName) && "출시일".equals(newSomething)) {
+			System.out.println("다만, 출시일은 반드시 OOOO-OO-OO 형식으로 입력해주세요.");
+			System.out.print(newSomething + " : ");
+			newOne = sc.nextLine();
+		} else if("Y".equals(ynName)) {
+			System.out.print(newSomething + " : ");
+			newOne = sc.nextLine();
+		}
+		return newOne;
+	}
+	
+	
+	
+	
 //	반복되는 조회-출력 메소드
 	public void selectCarOnePrint(Car selectCar, String menuName) {
 		if(selectCar != null) {

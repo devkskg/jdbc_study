@@ -45,4 +45,12 @@ public class Controller {
 	public Car selectCarOneByDate(String date) {
 		return service.selectCarOneByDate(date);
 	}
+
+	public int deleteCarOne(int no) {
+		return service.deleteCarOne(no);
+	}
+
+	public int editCarOne(int no, Object newName, Object newPrice, Object newDate) {
+		return service.editCarOne(no, newName, newPrice, newDate);
+	}
 }

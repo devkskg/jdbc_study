@@ -84,4 +84,18 @@ public class Service {
 		close(conn);
 		return selectCar;
 	}
+	
+	public int deleteCarOne(int no) {
+		Connection conn = getConnection();
+		int result = dao.deleteCarOne(conn, no);
+		close(conn);
+		return result;
+	}
+	
+	public int editCarOne(int no, Object newName, Object newPrice, Object newDate) {
+		Connection conn = getConnection();
+		int result = dao.editCarOne(conn, no, newName, newPrice, newDate);
+		close(conn);
+		return result;
+	}
 }

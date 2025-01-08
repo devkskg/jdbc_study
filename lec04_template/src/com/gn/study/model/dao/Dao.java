@@ -1,6 +1,7 @@
 package com.gn.study.model.dao;
 
 import static com.gn.study.common.JDBCTemplate.close;
+import static com.gn.study.common.JDBCTemplate.getConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -226,6 +227,70 @@ public class Dao {
 			close(pstmt);
 		}
 		return selectCar;
+	}
+	
+	public int deleteCarOne(Connection conn, int no) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int result = 0;
+		try {
+			String sql = "delete from car where car_no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			result = pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(rs);
+			close(pstmt);
+		}
+		return result;
+	}
+	
+	public int editCarOne(Connection conn, int no, Object newName, Object newPrice, Object newDate) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		
+		try {
+			String sqlName = " ";
+			String sqlPrice = " ";
+			String sqlDate = " ";
+			String sql = "update car set" + sqlName + sqlPrice + sqlDate + "where car_no = ?";
+//					+ "set car_model = "
+//					+ ",car_price = ? "
+//					+ ",car_date = str_to_date(?, '%Y-%m-%d') "
+//					+ "where car_no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+//			콤마콤마 어덯게 할지 !!!!!
+			if(newName != null) {
+				sqlName = " car_model = " + (String)newName + " ";
+			} 
+			if(newPrice != null) {
+				sqlPrice = " car_price = " + (Integer)newPrice + " ";
+			}
+			if(newDate != null) {
+				sqlDate = " car_date = str_to_date(" + (String)newDate + ", '%Y-%m-%d') ";
+			}
+			
+			result = pstmt.executeUpdate();
+//			if(newName != null) {
+//				sqlName = "set car_model = ? ";
+//				pstmt.setString(1, newName);
+//			}
+//			pstmt.setInt(2, newPrice);
+//			pstmt.setString(3, newDate);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		
+		
+		
+		return result;
 	}
 
 }
